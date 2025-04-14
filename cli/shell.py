@@ -1,3 +1,4 @@
+import os
 import cmd
 import sys
 from typing import TextIO
@@ -14,7 +15,10 @@ class ComitPal(cmd.Cmd):
         git_diff = get_git_diff()
         print(generate_commit_message(git_diff))
 
-    def do_bye(self, args):
+    def do_clear(self, args: None) -> None:
+        os.system('clear')
+
+    def do_bye(self, args: None) -> None:
         logger.info("Shutting down whisper..")
         logger.success("Done")
         sys.exit(0)

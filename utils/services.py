@@ -4,17 +4,16 @@ from . import logger
 from groq import Groq
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 @logger.catch
-def get_git_diff():
+def get_git_diff() -> str:
     """Get the git diff of the current staged changes."""
     result = subprocess.run(['git', 'diff'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return result.stdout.decode()
 
 @logger.catch
-def generate_commit_message(diff_msg):
+def generate_commit_message(diff_msg: str) -> str | None:
     client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
     prompt = f"""
