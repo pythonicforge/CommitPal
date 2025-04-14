@@ -16,6 +16,7 @@ class ComitPal(cmd.Cmd):
 
         git_diff = get_git_diff()
         commit_message = generate_commit_message(git_diff)
+        print(commit_message)
         logger.success("Commit message generated!")
 
         if changelog:

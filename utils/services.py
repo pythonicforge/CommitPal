@@ -1,10 +1,9 @@
 import os
+import datetime
 import subprocess
 from . import logger
 from groq import Groq
 from dotenv import load_dotenv
-from typing import List, Optional
-import datetime
 
 load_dotenv()
 
@@ -23,26 +22,24 @@ def generate_commit_message(diff_msg: str) -> str | None:
 
     {diff_msg}
 
-    Based on this, generate a concise and meaningful git commit message that accurately describes the changes made in the code. 
-    Ensure the message is professional and adheres to conventional commit standards.
+    Using the following template, generate a concise and meaningful git commit message that accurately describes the changes made in the code:
+    Template: "<type>(<scope>): <short description>"
+    
+    - <type>: The type of change (e.g., feat, fix, docs, style, refactor, test, chore).
+    - <scope>: The scope of the change (e.g., file or module name, optional).
+    - <short description>: A brief description of the change (imperative mood, max 50 characters).
 
-    IMPORTANT: Return only the commit message as a single line of text. Do not include any additional text, explanations, or formatting. 
-    Do not include phrases like "Based on the `git diff` output" or "Here is the commit message". Just return the commit message itself.
+    Based on this template generate me a commit message. 
     """
 
     try:
         logger.info("Generating commit message...")
         commit_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt.strip()}],
-            model="llama3-70b-8192",
+            model="gemma2-9b-it",
             temperature=0.8,
-            max_tokens=4096,
         )
         commit_msg = commit_completion.choices[0].message.content.strip()
-
-        # Remove surrounding quotes if present
-        if commit_msg.startswith('"') and commit_msg.endswith('"'):
-            commit_msg = commit_msg[1:-1]
 
         return commit_msg
 
@@ -69,7 +66,7 @@ def generate_changelog(diff_msg):
         logger.info("Generating changelog message...")
         changelog_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt.strip()}],
-            model="llama3-70b-8192",
+            model="gpt-4",
             temperature=0.8,
             max_tokens=4096,
         )
