@@ -77,8 +77,31 @@ def generate_changelog(diff_msg):
         logger.critical(f"Error: {e}")
         return ""
 
-def parse_args(args: str):
+@logger.catch
+def auto_push_to_github(commit_message: str) -> None:
+    """Automate committing and pushing changes to GitHub."""
+    try:
+        logger.info("Staging changes...")
+        subprocess.run(["git", "add", "."], check=True)
+
+        logger.info("Committing changes...")
+        subprocess.run(["git", "commit", "-m", commit_message], check=True)
+
+        logger.info("Pushing changes to GitHub...")
+        subprocess.run(["git", "push"], check=True)
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Git command failed: {e}")
+        raise
+
+    except Exception as e:
+        logger.critical(f"Unexpected error during Git operations: {e}")
+        raise
+
+def parse_args(args: str) -> tuple[str, bool, bool]:
     args = args.strip()
     changelog = "--changelog" in args
+    auto_push = "--auto-push" in args
+    args = args.replace("--auto-push", "").strip()
     args = args.replace("--changelog", "").strip()
-    return args, changelog
+    return args, changelog, auto_push
