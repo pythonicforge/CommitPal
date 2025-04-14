@@ -24,7 +24,9 @@ def generate_commit_message(diff_msg: str, style: str = "default") -> str | None
     {diff_msg}
 
     Based on this, please generate a concise and meaningful git commit message that accurately describes the changes made in the code. 
-    Ensure the message is professional and adheres to conventional commit standards. Use the following style: {style}. Make sure that the commit message can be understood irrespective of the style passed. Just one liner answer, and nothing else. Just the commit message and nothing else.
+    Ensure the message is professional and adheres to conventional commit standards. Use the following style: {style}.
+    
+    IMPORTANT: Return only the commit message as a single line of text. Do not include any additional text, explanations, or formatting. Just the commit message and nothing else.
     """
 
     try:
