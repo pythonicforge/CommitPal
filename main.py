@@ -6,7 +6,8 @@ if __name__ == "__main__":
     try:
         ComitPal().cmdloop()
     except KeyboardInterrupt:
-        logger.info("Keyboard Interrupt! Shutting down ComitPal...\nDone")
+        logger.info("Keyboard Interrupt! Shutting down ComitPal..." )
+        logger.success("Done")
         sys.exit(0)
     except Exception as e:
         logger.error(e)
