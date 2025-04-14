@@ -34,7 +34,11 @@ def generate_commit_message(diff_msg: str) -> str | None:
             temperature=0.8,
             max_tokens=4096,
         )
-        commit_msg = commit_completion.choices[0].message.content
+        commit_msg = commit_completion.choices[0].message.content.strip()
+
+        # Remove surrounding quotes if present
+        if commit_msg.startswith('"') and commit_msg.endswith('"'):
+            commit_msg = commit_msg[1:-1]
 
         return commit_msg
 

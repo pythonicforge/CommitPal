@@ -10,3 +10,6 @@ The changelog message is:
 
 "Enhanced commit message generation with optional changelog feature, and added support for parsing arguments."
 
+## 2025-04-14
+Refactor generate_commit_message to trim and remove surrounding quotes from generated commit message.
+
