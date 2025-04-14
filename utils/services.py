@@ -23,10 +23,11 @@ def generate_commit_message(diff_msg: str) -> str | None:
 
     {diff_msg}
 
-    Based on this, please generate a concise and meaningful git commit message that accurately describes the changes made in the code. 
+    Based on this, generate a concise and meaningful git commit message that accurately describes the changes made in the code. 
     Ensure the message is professional and adheres to conventional commit standards.
-    
-    IMPORTANT: Return only the commit message as a single line of text. Do not include any additional text, explanations, or formatting. Just the commit message and nothing else.
+
+    IMPORTANT: Return only the commit message as a single line of text. Do not include any additional text, explanations, or formatting. 
+    Do not include phrases like "Based on the `git diff` output" or "Here is the commit message". Just return the commit message itself.
     """
 
     try:
