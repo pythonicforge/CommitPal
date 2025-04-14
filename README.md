@@ -17,11 +17,11 @@ CommitPal is a command-line tool designed to simplify your Git workflow by gener
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/comitpal.git
+   git clone https://github.com/pythonicforge/CommitPal.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd commitpal
+   cd CommitPal
    ```
 3. Install dependencies:
    ```bash
