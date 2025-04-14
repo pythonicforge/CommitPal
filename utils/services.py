@@ -15,7 +15,7 @@ def get_git_diff() -> str:
     return result.stdout.decode()
 
 @logger.catch
-def generate_commit_message(diff_msg: str) -> str | None:
+def generate_commit_message(diff_msg: str, style: str = "default") -> str | None:
     client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
     prompt = f"""
@@ -23,7 +23,9 @@ def generate_commit_message(diff_msg: str) -> str | None:
 
     {diff_msg}
 
-    Based on this, please generate a concise and meaningful git commit message that accurately describes the changes made in the code. Ensure the message is professional and adheres to conventional commit standards. Just one liner answer, and nothing else! 
+    Based on this, please generate a concise and meaningful git commit message that accurately describes the changes made in the code. 
+    Ensure the message is professional and adheres to conventional commit standards. Use the following style: {style}.
+    Just one liner answer, and nothing else!
     """
 
     try:
@@ -102,10 +104,18 @@ def auto_push_to_github(commit_message: str) -> None:
         logger.critical(f"Unexpected error during Git operations: {e}")
         raise
 
-def parse_args(args: str) -> tuple[str, bool, bool]:
+def parse_args(args: str) -> tuple[str, bool, bool, str]:
     args = args.strip()
     changelog = "--changelog" in args
     auto_push = "--auto-push" in args
+
+    style = "default"
+    if "--style=" in args:
+        style_start = args.find("--style=") + len("--style=")
+        style_end = args.find(" ", style_start)
+        style = args[style_start:] if style_end == -1 else args[style_start:style_end]
+        args = args.replace(f"--style={style}", "").strip()
+
     args = args.replace("--auto-push", "").strip()
     args = args.replace("--changelog", "").strip()
-    return args, changelog, auto_push
+    return args, changelog, auto_push, style

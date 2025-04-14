@@ -12,10 +12,10 @@ class ComitPal(cmd.Cmd):
         super().__init__(completekey, stdin, stdout)
 
     def do_diff(self, args: Any) -> None:
-        args, changelog, auto_push = parse_args(args)
+        args, changelog, auto_push, style = parse_args(args)
 
         git_diff = get_git_diff()
-        commit_message = generate_commit_message(git_diff)
+        commit_message = generate_commit_message(git_diff, style)
         logger.success("Commit message generated!")
 
         if changelog:

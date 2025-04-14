@@ -13,3 +13,22 @@ The changelog message is:
 ## 2025-04-14
 Refactor generate_commit_message to trim and remove surrounding quotes from generated commit message.
 
+## 2025-04-14
+What a delightful `git diff` output!
+
+It appears that you've made changes to two files: `cli/shell.py` and `utils/services.py`. Here's a brief summary of the changes:
+
+**cli/shell.py**
+
+* In the `do_diff` method, the `parse_args` function is now called with an additional `style` parameter.
+* The `generate_commit_message` function is called with an additional `style` parameter.
+
+**utils/services.py**
+
+* The `generate_commit_message` function now takes an additional `style` parameter with a default value of "default".
+* The function's prompt has been updated to include the `style` parameter.
+* The `parse_args` function now returns a tuple with an additional `style` value.
+* The `style` value is extracted from the input `args` string using the `--style=` flag.
+
+Overall, it seems like you've added support for a `--style` flag to customize the commit message generation process.
+
