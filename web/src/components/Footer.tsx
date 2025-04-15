@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="text-terminal-white opacity-80 hover:text-terminal-green transition-colors font-mono"
             >
-              MIT License
+              License
             </a>
           </div>
         </div>
