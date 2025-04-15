@@ -66,7 +66,7 @@ def generate_changelog(diff_msg):
         logger.info("Generating changelog message...")
         changelog_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt.strip()}],
-            model="gpt-4",
+            model="gemma2-9b-it",
             temperature=0.8,
             max_tokens=4096,
         )

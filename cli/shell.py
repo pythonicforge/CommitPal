@@ -6,7 +6,7 @@ from utils import logger, get_git_diff, generate_commit_message, parse_args, gen
 
 class ComitPal(cmd.Cmd):
     intro = ""
-    prompt = "\n(comitpal) "
+    prompt = "\n(commitpal) "
 
     def __init__(self, completekey: str = "tab", stdin: TextIO | None = None, stdout: TextIO | None = None) -> None:
         super().__init__(completekey, stdin, stdout)
@@ -34,6 +34,6 @@ class ComitPal(cmd.Cmd):
         os.system('clear')
 
     def do_bye(self, args: None) -> None:
-        logger.info("Shutting down whisper..")
+        logger.info("Shutting down commitpal..")
         logger.success("Done")
         sys.exit(0)
