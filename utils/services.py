@@ -34,7 +34,7 @@ def generate_commit_message(diff_msg: str) -> str | None:
     - <scope>: The scope of the change (e.g., file or module name, optional).
     - <short description>: A brief description of the change (imperative mood, max 50 characters).
 
-    Based on this template generate me a commit message. No explainations aor anything other stuff, just the commit message.
+    Based on this template generate me a commit message. No explainations aor anything other stuff, just the commit message. Just a one-liner commit message.
     """
 
     try:
