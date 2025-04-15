@@ -95,7 +95,7 @@ const Index = () => {
             className="flex justify-center gap-4 flex-wrap"
           >
             <a 
-              href="/" 
+              href="https://github.com/pythonicforge/CommitPal/blob/main/README.md" 
               className="inline-flex items-center border border-terminal-green text-terminal-green hover:bg-terminal-green/10 px-4 py-2 rounded group"
             >
               <BookOpen size={16} className="mr-2 group-hover:rotate-12 transition-transform" />
