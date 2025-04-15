@@ -2,7 +2,7 @@ import sys
 from utils import logger
 from cli import ComitPal
 
-def main():
+def app():
     """Entry point for the CLI tool."""
     try:
         ComitPal().cmdloop()
@@ -15,4 +15,4 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    app()

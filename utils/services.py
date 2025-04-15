@@ -15,7 +15,12 @@ def get_git_diff() -> str:
 
 @logger.catch
 def generate_commit_message(diff_msg: str) -> str | None:
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        logger.error("GROQ_API_KEY not found in environment variables.")
+        return None
+
+    client = Groq(api_key=api_key)
 
     prompt = f"""
     I have the following `git diff` output from my current working directory:
@@ -49,10 +54,15 @@ def generate_commit_message(diff_msg: str) -> str | None:
     
 @logger.catch
 def generate_changelog(diff_msg):
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        logger.error("GROQ_API_KEY not found in environment variables.")
+        return None
+
     CHANGELOG_DIR = "changelogs"
     os.makedirs(CHANGELOG_DIR, exist_ok=True)
     CHANGELOG_FILE = os.path.join(CHANGELOG_DIR, "changelog.md")
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    client = Groq(api_key=api_key)
 
     prompt = f"""
     I have the following `git diff` output from my current working directory:

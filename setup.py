@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="commitpal",
+    name="comitpal",  # Ensure this matches the directory name
     version="1.0.0",
     description="AI-powered CLI tool for generating Git commit messages and changelogs.",
     author="Hardik Jaiswal",
@@ -15,7 +15,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "comitpal=main:main", 
+            "comitpal=comitpal_core.main:app",  # Correct entry point
         ],
     },
     classifiers=[
