@@ -20,7 +20,11 @@ def generate_commit_message(diff_msg: str) -> str | None:
         logger.error("GROQ_API_KEY not found in environment variables.")
         return None
 
-    client = Groq(api_key=api_key)
+    try:
+        client = Groq(api_key=api_key)
+    except Exception as e:
+        logger.critical(f"Failed to initialize Groq client: {e}")
+        return None
 
     prompt = f"""
     I have the following `git diff` output from my current working directory:
@@ -34,7 +38,7 @@ def generate_commit_message(diff_msg: str) -> str | None:
     - <scope>: The scope of the change (e.g., file or module name, optional).
     - <short description>: A brief description of the change (imperative mood, max 50 characters).
 
-    Based on this template generate me a commit message. No explainations aor anything other stuff, just the commit message. Just a one-liner commit message.
+    Based on this template generate me a commit message. No explanations or anything other stuff, just the commit message. Just a one-liner commit message.
     """
 
     try:
@@ -46,11 +50,30 @@ def generate_commit_message(diff_msg: str) -> str | None:
         )
         commit_msg = commit_completion.choices[0].message.content.strip()
 
+        if not commit_msg:
+            logger.error("Generated commit message is empty.")
+            return None
+
+        if len(commit_msg) > 72:
+            logger.warning("Generated commit message exceeds 72 characters. Consider shortening it.")
+
         return commit_msg
 
+    except KeyError as e:
+        logger.critical(f"Unexpected response structure from Groq API: {e}")
+        return None
+
+    except ConnectionError as e:
+        logger.error(f"Failed to connect to Groq API: {e}")
+        return None
+
+    except TimeoutError as e:
+        logger.error(f"Request to Groq API timed out: {e}")
+        return None
+
     except Exception as e:
-        logger.critical(f"Error: {e}")
-        return ""
+        logger.critical(f"Unexpected error while generating commit message: {e}")
+        return None
     
 @logger.catch
 def generate_changelog(diff_msg):
@@ -94,8 +117,11 @@ def generate_changelog(diff_msg):
 
 @logger.catch
 def auto_push_to_github(commit_message: str) -> None:
-    """Automate committing and pushing changes to GitHub."""
+    """Automate committing and pushing changes to GitHub with enhanced error handling."""
     try:
+        logger.info("Pulling latest changes from remote...")
+        subprocess.run(["git", "pull"], check=True)
+
         logger.info("Staging changes...")
         subprocess.run(["git", "add", "."], check=True)
 
@@ -106,7 +132,18 @@ def auto_push_to_github(commit_message: str) -> None:
         subprocess.run(["git", "push"], check=True)
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Git command failed: {e}")
+        if "nothing to commit" in e.stderr.decode().lower():
+            logger.warning("No changes to commit. Skipping push.")
+        elif "could not read from remote repository" in e.stderr.decode().lower():
+            logger.error("Failed to connect to the remote repository. Check your SSH keys or network connection.")
+        elif "merge conflict" in e.stderr.decode().lower():
+            logger.error("Merge conflict detected. Resolve conflicts manually before pushing.")
+        else:
+            logger.error(f"Git command failed: {e.stderr.decode().strip()}")
+        raise
+
+    except FileNotFoundError as e:
+        logger.critical("Git is not installed or not found in PATH. Please install Git and try again.")
         raise
 
     except Exception as e:
